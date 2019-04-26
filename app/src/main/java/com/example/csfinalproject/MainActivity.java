@@ -10,33 +10,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    /*
-      For generating random numbers
-     */
+    //For generating random numbers
     private Random random = new Random();
-
-    /*
-      This is needed to get at resources stored in xml file.
-     */
-    //Resources res = getResources();
-
-    /* Array of strings that can pop up in the recommendations bar.
-       Recommendations stored in strings.xml
-     */
-
-    //private String[] recommendations = res.getStringArray(R.array.recommendations);
-    /*
-      The words in the text box.
-     */
-
-    //private EditText userInput;
-    /*
-      The drop down menu of sample texts
-     */
-    //private Spinner sampleText = findViewById(R.id.sampleText);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         // randomly pick a recommendation to be used
         Resources res = getResources();
+        EditText userInput = findViewById(R.id.editText);
         String[] recommendations = res.getStringArray(R.array.recommendations);
         TextView recommendation = findViewById(R.id.recommend);
         recommendation.setText(recommendations[random.nextInt(recommendations.length)]);
@@ -85,6 +65,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+    // this will be called when sort button is clicked.
+    public void sort(View view) {
+        int random = this.random.nextInt(2);
+        EditText userInput = findViewById(R.id.editText);
+        String text = userInput.getText().toString();
+        String [] words = text.replaceAll("\\p{P}", "").trim().toLowerCase().split(" ");
+        String[] output = null;
+        if (random == 0) {
+            output = Sorters.alphabeticalSort(words);
+        } else if (random == 1) {
+            output = Sorters.lengthSort(words);
+        }
+        String sortedText = output[0] + " ";
+        for (int i = 1; i < output.length; i++) {
+            sortedText = sortedText + output[i] + " " ;
+        }
+        userInput.setText(sortedText);
+    }
+    //find and replace common words with phrases
+    public void termPaperMode(View view) {
+        //string.equalsIgnoreCase will be useful.
+        //Punctuation must be ignored and put back.
+        EditText userInput = findViewById(R.id.editText);
+        String text = userInput.getText().toString();
+    }
+    public void loremIpsum() {
 
     }
     //void updateDisplay() {
