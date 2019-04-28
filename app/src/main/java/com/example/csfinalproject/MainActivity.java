@@ -11,6 +11,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -35,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sampleText.setAdapter(myAdapter);
         sampleText.setOnItemSelectedListener(this);
         //set up button handlers
-
     }
 
     @Override
@@ -91,9 +108,104 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Punctuation must be ignored and put back.
         EditText userInput = findViewById(R.id.editText);
         String text = userInput.getText().toString();
+        String [] words = text.trim().split(" ");
+        String output = "";
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equalsIgnoreCase("in")) {
+                words[i] = "within the confines of";
+            }
+            if (words[i].equalsIgnoreCase("the")) {
+                words[i] = "(noun ahead)";
+            }
+            if (words[i].equalsIgnoreCase("an")) {
+                words[i] = "(noun ahead)";
+            }
+            if (words[i].equalsIgnoreCase("and")) {
+                words[i] = "in addition to";
+            }
+            if (words[i].equalsIgnoreCase("time")) {
+                words[i] = "an illusion of human perception";
+            }
+            if (words[i].equalsIgnoreCase("family")) {
+                words[i] = "group of related things";
+            }
+            if (words[i].equalsIgnoreCase("he")) {
+                words[i] = "the male in question";
+            }
+            if (words[i].equalsIgnoreCase("she")) {
+                words[i] = "the female in question";
+            }
+            if (words[i].equalsIgnoreCase("you")) {
+                words[i] = "the thing I am addressing directly";
+            }
+            if (words[i].equalsIgnoreCase("in")) {
+                words[i] = "within the confines of";
+            }
+        }
+        for (int i = 0; i < words.length; i++) {
+            output =output + words[i] + " " ;
+        }
+        userInput.setText(output);
     }
-    public void loremIpsum() {
+    public void pigLatin(View view) {
+        //here begins the API code
+        final EditText textView = findViewById(R.id.editText);
+// Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://api.funtranslations.com/translate/piglatin.json?text=" + textView.getText();
 
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        String[] splitText = response.split(":");
+                        String output = splitText[4];
+                        output = output.substring(2, output.length() - 10);
+                        textView.setText(output);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                textView.setText("That didn't work!");
+            }
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+    public void loremIpsum(View view) {
+        final EditText textView = findViewById(R.id.editText);
+        String text = textView.getText().toString();
+        int length = text.length() / 400;
+        if (length <= 0) {
+            length = 1;
+        }
+// ...
+//here begins the API code
+// Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="https://loripsum.net/api/plaintext/" + String.valueOf(length);
+
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        textView.setText(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                textView.setText("That didn't work!");
+            }
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    //here ends the API code
     }
     //void updateDisplay() {
     //}
