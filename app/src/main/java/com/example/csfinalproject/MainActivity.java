@@ -138,8 +138,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (words[i].equalsIgnoreCase("you")) {
                 words[i] = "the thing I am addressing directly";
             }
-            if (words[i].equalsIgnoreCase("in")) {
-                words[i] = "within the confines of";
+            if (words[i].equalsIgnoreCase("if")) {
+                words[i] = "the situation being";
+            }
+            if (words[i].equalsIgnoreCase("them")) {
+                words[i] = "the group of creatures in question";
+            }
+            if (words[i].equalsIgnoreCase("they")) {
+                words[i] = "the group in question";
+            }
+            if (words[i].equalsIgnoreCase("love")) {
+                words[i] = "feeling of closeness and intimacy";
+            }
+            if (words[i].equalsIgnoreCase("war")) {
+                words[i] = "death, dying, and killing";
+            }
+            if (words[i].equalsIgnoreCase("after")) {
+                words[i] = "chronologically at a later time";
             }
         }
         for (int i = 0; i < words.length; i++) {
